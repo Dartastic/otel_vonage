@@ -2,7 +2,7 @@ name: otel_vonage
 description: >-
   OpenTelemetry instrumentation for vonage by Dartastic.io. Adds standard
   OpenTelemetry observability to applications that use vonage.
-version: 0.1.0
+version: 0.1.1-wip
 repository: https://github.com/dartastic/otel_vonage
 homepage: https://dartastic.io
 
