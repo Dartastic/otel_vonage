@@ -1,15 +1,16 @@
-// Licensed under the Dartastic Pro Software License Agreement.
+// Licensed under the Apache License, Version 2.0
 // Copyright 2025-2026 Mindful Software LLC d/b/a Dartastic.io, All rights reserved.
 
-import 'package:dartastic_opentelemetry/dartastic_opentelemetry.dart';
+import 'package:dartastic_opentelemetry_api/dartastic_opentelemetry_api.dart';
 
 import 'otel_vonage_suppression.dart';
 
 const _tracerName = 'dartastic_otel_libs_vonage';
 
-Tracer _tracer() => OTel.tracerProvider().getTracer(_tracerName);
+APITracer _tracer() => OTelAPI.tracerProvider().getTracer(_tracerName);
 
 class VonageResult {
+  /// Creates a result.
   const VonageResult({
     this.api,
     this.applicationId,
@@ -111,8 +112,13 @@ class VonageResult {
   final int? statusCode;
 }
 
+/// What a traced call returned: the value for the caller plus fields
+/// recorded on the span.
 class VonageCallResult<T> {
+  /// Creates a call result.
   const VonageCallResult({required this.value, this.result});
+
+  /// The value returned to the caller.
   final T value;
   final VonageResult? result;
 }
@@ -150,7 +156,7 @@ Future<T> tracedVonage<T>({
   final span = _tracer().startSpan(
     'vonage $operation',
     kind: SpanKind.client,
-    attributes: OTel.attributesFromMap(m),
+    attributes: OTelAPI.attributesFromMap(m),
   );
   try {
     final r = await invoke();
@@ -158,46 +164,46 @@ Future<T> tracedVonage<T>({
       final res = r.result!;
       final extras = <Attribute<Object>>[];
       if (res.api != null) {
-        extras.add(OTel.attributeString('vonage.api', res.api!));
+        extras.add(OTelAPI.attributeString('vonage.api', res.api!));
       }
       if (res.applicationId != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'vonage.application.id',
           res.applicationId!,
         ));
       }
       if (res.from != null) {
-        extras.add(OTel.attributeString('vonage.from', res.from!));
+        extras.add(OTelAPI.attributeString('vonage.from', res.from!));
       }
       if (res.to != null) {
-        extras.add(OTel.attributeString('vonage.to', res.to!));
+        extras.add(OTelAPI.attributeString('vonage.to', res.to!));
       }
       if (res.countryCode != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'vonage.country_code',
           res.countryCode!,
         ));
       }
       if (res.networkCode != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'vonage.network_code',
           res.networkCode!,
         ));
       }
       if (res.messageId != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'vonage.message.id',
           res.messageId!,
         ));
       }
       if (res.messageType != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'vonage.message.type',
           res.messageType!,
         ));
       }
       if (res.messageStatus != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'vonage.message.status',
           res.messageStatus!,
         ));
@@ -211,31 +217,31 @@ Future<T> tracedVonage<T>({
         }
       }
       if (res.smsCount != null) {
-        extras.add(OTel.attributeInt('vonage.sms.count', res.smsCount!));
+        extras.add(OTelAPI.attributeInt('vonage.sms.count', res.smsCount!));
       }
       if (res.smsPriceMicros != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'vonage.sms.price_micros',
           res.smsPriceMicros!,
         ));
       }
       if (res.smsCurrency != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'vonage.sms.currency',
           res.smsCurrency!,
         ));
       }
       if (res.callId != null) {
-        extras.add(OTel.attributeString('vonage.call.id', res.callId!));
+        extras.add(OTelAPI.attributeString('vonage.call.id', res.callId!));
       }
       if (res.callDirection != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'vonage.call.direction',
           res.callDirection!,
         ));
       }
       if (res.callStatus != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'vonage.call.status',
           res.callStatus!,
         ));
@@ -247,25 +253,25 @@ Future<T> tracedVonage<T>({
         }
       }
       if (res.callRateMicros != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'vonage.call.rate_micros',
           res.callRateMicros!,
         ));
       }
       if (res.callDurationSec != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'vonage.call.duration_sec',
           res.callDurationSec!,
         ));
       }
       if (res.verifyRequestId != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'vonage.verify.request_id',
           res.verifyRequestId!,
         ));
       }
       if (res.verifyStatus != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'vonage.verify.status',
           res.verifyStatus!,
         ));
@@ -277,38 +283,38 @@ Future<T> tracedVonage<T>({
         }
       }
       if (res.verifyChannel != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'vonage.verify.channel',
           res.verifyChannel!,
         ));
       }
       if (res.verifyAttempts != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'vonage.verify.attempts',
           res.verifyAttempts!,
         ));
       }
       if (res.numberInsightLevel != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'vonage.number_insight.level',
           res.numberInsightLevel!,
         ));
       }
       if (res.errorCode != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'vonage.error.code',
           res.errorCode!,
         ));
         span.setStatus(SpanStatusCode.Error, 'Vonage ${res.errorCode}');
       }
       if (res.errorMessage != null) {
-        extras.add(OTel.attributeString(
+        extras.add(OTelAPI.attributeString(
           'vonage.error.message',
           res.errorMessage!,
         ));
       }
       if (res.statusCode != null) {
-        extras.add(OTel.attributeInt(
+        extras.add(OTelAPI.attributeInt(
           'http.response.status_code',
           res.statusCode!,
         ));
@@ -316,13 +322,13 @@ Future<T> tracedVonage<T>({
           span.setStatus(SpanStatusCode.Error, 'Vonage HTTP ${res.statusCode}');
         }
       }
-      if (extras.isNotEmpty) span.addAttributes(OTel.attributes(extras));
+      if (extras.isNotEmpty) span.addAttributes(OTelAPI.attributes(extras));
     }
     return r.value;
   } catch (e, st) {
-    span.addAttributes(OTel.attributes([
-      OTel.attributeString(
-        ErrorResource.errorType.key,
+    span.addAttributes(OTelAPI.attributes([
+      OTelAPI.attributeString(
+        ErrorAttributes.errorType.key,
         e.runtimeType.toString(),
       ),
     ]));
